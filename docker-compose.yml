@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: ops-orchestrator-postgres
+    environment:
+      POSTGRES_DB: ops_orchestrator
+      POSTGRES_USER: opsuser
+      POSTGRES_PASSWORD: opspass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U opsuser"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: ops-orchestrator-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  vault:
+    image: vault:1.15
+    container_name: ops-orchestrator-vault
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: dev-root-token
+      VAULT_DEV_LISTEN_ADDRESS: "0.0.0.0:8200"
+    cap_add:
+      - IPC_LOCK
+    command: ["vault", "server", "-dev"]
+
+volumes:
+  postgres_data:
+  redis_data:
