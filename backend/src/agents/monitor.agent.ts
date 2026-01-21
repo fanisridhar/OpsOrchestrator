@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { IncidentService } from '../incidents/incident.service';
-import { Incident, IncidentSeverity } from '../database/entities/incident.entity';
+import { Incident, IncidentSeverity, IncidentStatus } from '../database/entities/incident.entity';
 
 @Injectable()
 export class MonitorAgent {
@@ -15,7 +15,7 @@ export class MonitorAgent {
       description: alertData.annotations?.description || alertData.message || JSON.stringify(alertData),
       severity,
       source: alertData.source || 'prometheus',
-      status: 'open',
+      status: IncidentStatus.OPEN,
       metadata: {
         alertData,
         receivedAt: new Date().toISOString(),

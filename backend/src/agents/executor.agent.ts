@@ -3,6 +3,7 @@ import { ActionService } from '../actions/action.service';
 import { ConnectorService } from '../connectors/connector.service';
 import { ActionStatus } from '../database/entities/action.entity';
 import { AuditService } from '../audit/audit.service';
+import { AuditAction } from '../database/entities/audit-log.entity';
 
 @Injectable()
 export class ExecutorAgent {
@@ -47,7 +48,7 @@ export class ExecutorAgent {
 
       // Log audit
       await this.auditService.log({
-        action: 'action_executed',
+        action: AuditAction.ACTION_EXECUTED,
         userId: approvedBy,
         entityType: 'action',
         entityId: actionId,
@@ -66,7 +67,7 @@ export class ExecutorAgent {
 
       // Log audit
       await this.auditService.log({
-        action: 'action_executed',
+        action: AuditAction.ACTION_EXECUTED,
         userId: approvedBy,
         entityType: 'action',
         entityId: actionId,

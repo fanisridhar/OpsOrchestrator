@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ActionService } from './action.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { Action, ActionType } from '../database/entities/action.entity';
+import { Action, ActionType, ActionStatus } from '../database/entities/action.entity';
 
 @Controller('actions')
 @UseGuards(JwtAuthGuard)
@@ -20,7 +20,7 @@ export class ActionController {
   async create(@Body() data: Partial<Action>, @Request() req) {
     return this.actionService.create({
       ...data,
-      status: 'pending',
+      status: ActionStatus.PENDING,
     });
   }
 

@@ -2,6 +2,7 @@ import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { UserService } from '../users/user.service';
+import { UserRole } from '../database/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
 @Controller('auth')
@@ -37,6 +38,7 @@ export class AuthController {
     const user = await this.userService.create({
       ...registerDto,
       password: hashedPassword,
+      role: registerDto.role ? (registerDto.role as UserRole) : undefined,
     });
     return this.authService.login(user);
   }

@@ -1,5 +1,5 @@
 import {
-  WebSocketGateway,
+  WebSocketGateway as WSGateway,
   WebSocketServer,
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -11,7 +11,7 @@ import { Incident } from '../database/entities/incident.entity';
 import { Action } from '../database/entities/action.entity';
 import { Approval } from '../database/entities/approval.entity';
 
-@WebSocketGateway({
+@WSGateway({
   cors: {
     origin: process.env.FRONTEND_URL || 'http://localhost:3001',
     credentials: true,

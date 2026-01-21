@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Action, ActionStatus, ActionType } from '../database/entities/action.entity';
 import { WebSocketGateway } from '../websocket/websocket.gateway';
 import { AuditService } from '../audit/audit.service';
+import { AuditAction } from '../database/entities/audit-log.entity';
 
 @Injectable()
 export class ActionService {
@@ -23,7 +24,7 @@ export class ActionService {
     
     // Log audit
     await this.auditService.log({
-      action: 'action_created',
+      action: AuditAction.ACTION_CREATED,
       entityType: 'action',
       entityId: saved.id,
       description: `Action ${saved.type} created for incident ${saved.incidentId}`,

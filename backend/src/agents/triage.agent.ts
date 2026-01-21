@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { IncidentService } from '../incidents/incident.service';
-import { IncidentStatus, IncidentSeverity } from '../database/entities/incident.entity';
+import { Incident, IncidentStatus, IncidentSeverity } from '../database/entities/incident.entity';
 
 @Injectable()
 export class TriageAgent {

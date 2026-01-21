@@ -9,6 +9,7 @@ import { WebSocketGateway } from '../websocket/websocket.gateway';
 import { AuditService } from '../audit/audit.service';
 import { UserRole } from '../database/entities/user.entity';
 import { PolicyService } from '../common/policy.service';
+import { AuditAction } from '../database/entities/audit-log.entity';
 
 @Injectable()
 export class ApprovalService {
@@ -80,7 +81,7 @@ export class ApprovalService {
 
     // Log audit
     await this.auditService.log({
-      action: 'approval_granted',
+      action: AuditAction.APPROVAL_GRANTED,
       userId,
       entityType: 'approval',
       entityId: approvalId,
@@ -117,7 +118,7 @@ export class ApprovalService {
 
     // Log audit
     await this.auditService.log({
-      action: 'approval_rejected',
+      action: AuditAction.APPROVAL_REJECTED,
       userId,
       entityType: 'approval',
       entityId: approvalId,
