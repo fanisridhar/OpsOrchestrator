@@ -23,8 +23,5 @@
     "multi-agent"
   ],
   "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "webpack-cli": "^6.0.1"
-  }
+  "license": "MIT"
 }

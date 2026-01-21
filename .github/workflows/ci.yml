@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: ops_orchestrator
+          POSTGRES_USER: opsuser
+          POSTGRES_PASSWORD: opspass
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build backend
+      run: npm run build:backend
+      env:
+        DATABASE_HOST: localhost
+        DATABASE_PORT: 5432
+        DATABASE_USER: opsuser
+        DATABASE_PASSWORD: opspass
+        DATABASE_NAME: ops_orchestrator
+        REDIS_HOST: localhost
+        REDIS_PORT: 6379
+
+    - name: Build frontend
+      run: npm run build:frontend
+      env:
+        NEXT_PUBLIC_API_URL: http://localhost:3000
+        NEXT_PUBLIC_WS_URL: ws://localhost:3000
