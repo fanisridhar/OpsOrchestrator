@@ -58,9 +58,15 @@ export default function IncidentDetailPage() {
     );
   }
 
+  const handleUpdate = () => {
+    if (params.id) {
+      loadIncident(params.id as string);
+    }
+  };
+
   return (
     <DashboardLayout>
-      <IncidentDetail incident={incident} onUpdate={loadIncident} />
+      <IncidentDetail incident={incident} onUpdate={handleUpdate} />
     </DashboardLayout>
   );
 }
